@@ -3,17 +3,17 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 
 import Login from './pages/Login/Login';
 
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './dashboards/AdminDashboard';
 import MainPanel from './components/MainPanel/MainPanel';
-import StudentsList from './components/StudentsList/StudentsList';
-import TeachersList from './components/TeachersList/TeachersList';
-import ExamsList from './components/ExamsList/ExamsList';
+import StudentsList from './pages/StudentsList/StudentsList';
+import TeachersList from './pages/TeachersList/TeachersList';
+import ExamsList from './pages/ExamsList/ExamsList';
 
-import NewUser from './components/NewUser/NewUser';
-import NewExam from './components/NewExam/NewExam';
+import NewUser from './pages/NewUser/NewUser';
+import NewExam from './pages/NewExam/NewExam';
 
-import TeacherDashboard from './pages/TeacherDashboard';
-import StudentDashboard from './pages/StudentDashboard';
+import TeacherDashboard from './dashboards/TeacherDashboard';
+import StudentDashboard from './dashboards/StudentDashboard';
 
 function App() {
   return (

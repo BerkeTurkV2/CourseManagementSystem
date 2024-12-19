@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DarkMode from "../../components/DarkMode";
+import DarkMode from "../../components/DarkMode/DarkMode";
 import './styles.css';
 
 function Login() {
