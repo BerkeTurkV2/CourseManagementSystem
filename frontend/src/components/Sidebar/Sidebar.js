@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaHome, FaUserGraduate, FaChalkboardTeacher, FaUserPlus } from 'react-icons/fa';
 import { PiNoteFill, PiNotePencilBold } from "react-icons/pi";
+import { BsCalendarWeek } from 'react-icons/bs';
 import { Link } from "react-router-dom";
 import './Sidebar.css';
 
@@ -31,6 +32,11 @@ const Sidebar = () => {
                 <li className="nav-item mb-4">
                     <Link to="/admin/examsList" className="nav-link text-white d-flex align-items-center">
                         <PiNoteFill className="me-3 fs-3" /> Sınavlar
+                    </Link>
+                </li>
+                <li className="nav-item mb-4">
+                    <Link to="/admin/calendar" className="nav-link text-white d-flex align-items-center">
+                        <BsCalendarWeek className="me-3 fs-3" /> Takvim
                     </Link>
                 </li>
                 <li className="nav-item mb-2">

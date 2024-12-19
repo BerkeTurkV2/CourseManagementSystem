@@ -25,12 +25,23 @@ const login = async (req, res) => {
 
     // Şifre eşleşti, token oluştur
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
+      { 
+        id: user.id, 
+        username: user.username, 
+        role: user.role,
+        fullname: user.fullname 
+      },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
     );
 
-    res.status(200).json({ token });
+    // Token ile birlikte kullanıcı rolünü de gönder
+    res.status(200).json({ 
+      token,
+      role: user.role,
+      username: user.username,
+      fullname: user.fullname
+    });
   } catch (err) {
     console.error('Giriş işlemi sırasında hata oluştu:', err);
     res.status(500).json({ message: 'Bir hata oluştu. Lütfen tekrar deneyin.' });

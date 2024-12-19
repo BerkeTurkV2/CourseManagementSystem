@@ -133,27 +133,22 @@ const getExamDates = async (req, res) => {
             FROM exams 
             ORDER BY examDate DESC`;
         
-        console.log('Executing query:', query);
         const results = await db.executeQuery(query);
-        console.log('Raw exam dates:', results);
 
         // Tarihleri UTC+3'e göre ayarla
         const adjustedResults = results.map(result => ({
             ...result,
             examDate: new Date(new Date(result.examDate).getTime() + (3 * 60 * 60 * 1000)).toISOString()
         }));
-
-        console.log('Adjusted exam dates:', adjustedResults);
         
         if (!adjustedResults || adjustedResults.length === 0) {
-            console.log('No exam dates found');
             return res.json([]);
         }
 
         res.json(adjustedResults);
     } catch (error) {
-        console.error('Detailed error in getExamDates:', error);
-        res.status(500).json({ message: 'Error fetching exam dates' });
+        console.error('Sınav tarihleri getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sınav tarihleri getirilirken bir hata oluştu' });
     }
 };
 
@@ -161,7 +156,6 @@ const getExamDates = async (req, res) => {
 const getExamTypesByDate = async (req, res) => {
     try {
         const { date } = req.params;
-        console.log('Requested date for exam types:', date);
 
         const query = `
             SELECT DISTINCT examType
@@ -170,11 +164,10 @@ const getExamTypesByDate = async (req, res) => {
             ORDER BY examType`;
         
         const results = await db.executeQuery(query, [date]);
-        console.log('Exam types for date:', results);
         res.json(results);
     } catch (error) {
-        console.error('Error fetching exam types:', error);
-        res.status(500).json({ message: 'Error fetching exam types' });
+        console.error('Sınav türleri getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sınav türleri getirilirken bir hata oluştu' });
     }
 };
 
@@ -182,9 +175,6 @@ const getExamTypesByDate = async (req, res) => {
 const getExamsByDateAndType = async (req, res) => {
     try {
         const { date, examType } = req.params;
-        console.log('Requested date:', date);
-        console.log('Requested exam type:', examType);
-
         const queryDate = new Date(date);
         queryDate.setHours(3, 0, 0, 0);
 
@@ -202,11 +192,10 @@ const getExamsByDateAndType = async (req, res) => {
             ORDER BY e.puan DESC`;
         
         const results = await db.executeQuery(query, [queryDate, examType]);
-        console.log('Query results:', results);
         res.json(results);
     } catch (error) {
-        console.error('Error fetching exams:', error);
-        res.status(500).json({ message: 'Error fetching exams' });
+        console.error('Sınav sonuçları getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sınav sonuçları getirilirken bir hata oluştu' });
     }
 };
 

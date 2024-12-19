@@ -2,55 +2,59 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080';
 
-export const addUser = (data) => axios.post(`${API_URL}/api/add-user`, data);
+// Axios instance oluştur
+const api = axios.create({
+  baseURL: API_URL,
+});
+
+// Request interceptor ekle
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Auth endpoints
+export const login = (data) => api.post('/api/login', data);
+export const addUser = (data) => api.post('/api/add-user', data);
 export const checkStudentNoUnique = (studentNo) => {
-    return axios.post(`${API_URL}/api/check-student-no`, { studentNo })
-      .then((response) => response.data.isUnique)  // Burada, backend'den gelen 'isUnique' değerini döndürüyoruz
-      .catch((error) => {
-        console.error('Benzersizlik kontrolü sırasında hata oluştu:', error);
-        return false; // Hata durumunda benzersiz olmadığını varsay
-      });
-  };
-
-export const getStudents = () => axios.get(`${API_URL}/api/students`);
-export const getTeachers = () => axios.get(`${API_URL}/api/teachers`);
-
-export const deleteStudents = (ids) => {
-  return axios.post(`${API_URL}/api/deleteStudents`, { ids });
+  return api.post('/api/check-student-no', { studentNo })
+    .then((response) => response.data.isUnique)
+    .catch((error) => {
+      console.error('Benzersizlik kontrolü sırasında hata oluştu:', error);
+      return false;
+    });
 };
 
-export const deleteTeachers = (ids) => {
-  return axios.post(`${API_URL}/api/deleteTeachers`, { ids });
-};
+// User endpoints
+export const getStudents = () => api.get('/api/students');
+export const getTeachers = () => api.get('/api/teachers');
+export const deleteStudents = (ids) => api.post('/api/deleteStudents', { ids });
+export const deleteTeachers = (ids) => api.post('/api/deleteTeachers', { ids });
 
-// Sınav sonucu ekleme
-export const addExam = (data) => axios.post(`${API_URL}/api/add-exam`, data);
-
-// Öğrenci numarasına göre öğrenci bilgilerini getirme
-export const getStudentInfo = (studentNo) => axios.get(`${API_URL}/api/student-info/${studentNo}`);
-
-// Tüm öğrenci numaralarını getirme
-export const getAllStudentNumbers = () => axios.get(`${API_URL}/api/student-numbers`);
-
-// Öğrenci listesini getir
-export const getStudentList = () => axios.get(`${API_URL}/api/student-list`);
-
-// Sınav sonuçlarını silme
+// Exam endpoints
+export const addExam = (data) => api.post('/api/add-exam', data);
+export const getStudentInfo = (studentNo) => api.get(`/api/student-info/${studentNo}`);
+export const getAllStudentNumbers = () => api.get('/api/student-numbers');
+export const getStudentList = () => api.get('/api/student-list');
 export const deleteExams = async (ids) => {
-    return await axios.post(`${API_URL}/api/delete`, { ids });
+  return await api.post('/api/delete', { ids });
 };
+export const getExamDates = () => api.get('/api/dates');
+export const getExamTypesByDate = (date) => api.get(`/api/exam-types/${date}`);
+export const getExamsByDateAndType = (date, examType) => api.get(`/api/by-date/${date}/${examType}`);
+export const getLatestExamScores = (date) => api.get(`/api/latest-exam-scores/${date}`);
+export const getLatestExamDetails = (date) => api.get(`/api/latest-exam-details/${date}`);
 
-// Sınav tarihleri
-export const getExamDates = () => axios.get(`${API_URL}/api/dates`);
-
-// Belirli bir tarihteki sınav türlerini getir
-export const getExamTypesByDate = (date) => axios.get(`${API_URL}/api/exam-types/${date}`);
-
-// Belirli bir tarih ve türdeki sınavları getir
-export const getExamsByDateAndType = (date, examType) => axios.get(`${API_URL}/api/by-date/${date}/${examType}`);
-
-// Belirli bir tarihteki son sınavın öğrenci puanlarını getir
-export const getLatestExamScores = (date) => axios.get(`${API_URL}/api/latest-exam-scores/${date}`);
-
-// Son sınavın detaylarını getir
-export const getLatestExamDetails = (date) => axios.get(`${API_URL}/api/latest-exam-details/${date}`);
+// Calendar events endpoints
+export const getEvents = () => api.get('/api/events');
+export const addEvent = (data) => api.post('/api/events', data);
+export const updateEvent = (id, data) => api.put(`/api/events/${id}`, data);
+export const deleteEvent = (id) => api.delete(`/api/events/${id}`);
