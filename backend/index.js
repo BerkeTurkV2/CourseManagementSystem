@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
-const examRoutes = require('./routes/examRoutes');  // Yeni eklenen satır
+const examRoutes = require('./routes/examRoutes');  
 
 const app = express();
 app.use(cors());
@@ -12,8 +12,7 @@ app.use(express.json());
 // Rotalar
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
-app.use('/api', examRoutes);  // Yeni eklenen satır
-
+app.use('/api', examRoutes);  
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });

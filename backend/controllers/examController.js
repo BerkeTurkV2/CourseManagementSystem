@@ -1,4 +1,5 @@
-const db = require('../db');
+require('dotenv').config();
+const db = require('../config/db');
 
 // Yeni sınav sonucu ekleme
 const addExam = async (req, res) => {
@@ -54,7 +55,7 @@ const addExam = async (req, res) => {
     ];
 
     try {
-        await db.execute(query, values);
+        await db.executeQuery(query, values);
         res.status(201).json({ message: 'Sınav sonucu başarıyla eklendi!' });
     } catch (err) {
         console.error('Sınav sonucu eklenirken hata oluştu:', err);
@@ -69,7 +70,7 @@ const getStudentInfo = async (req, res) => {
     const query = 'SELECT fullname, exam, class FROM users WHERE studentNo = ? AND role = "student"';
     
     try {
-        const [result] = await db.execute(query, [studentNo]);
+        const result = await db.executeQuery(query, [studentNo]);
 
         if (result.length === 0) {
             return res.status(404).json({ message: 'Öğrenci bulunamadı.' });
@@ -87,7 +88,7 @@ const getAllStudentNumbers = async (req, res) => {
     const query = 'SELECT studentNo, fullname FROM users WHERE role = "student" ORDER BY studentNo';
     
     try {
-        const [result] = await db.execute(query);
+        const result = await db.executeQuery(query);
         res.status(200).json(result);
     } catch (err) {
         console.error('Öğrenci numaraları getirilirken hata oluştu:', err);
@@ -113,7 +114,7 @@ const getExamsByDate = async (req, res) => {
             WHERE DATE(e.examDate) = DATE(?)
             ORDER BY u.studentNo`;
         
-        const [results] = await db.execute(query, [queryDate]);
+        const results = await db.executeQuery(query, [queryDate]);
         console.log('Query results:', results);
         res.json(results);
     } catch (error) {
@@ -125,9 +126,6 @@ const getExamsByDate = async (req, res) => {
 // Get all unique exam dates
 const getExamDates = async (req, res) => {
     try {
-        const connection = await db.getConnection();
-        console.log('Database connection successful');
-
         const query = `
             SELECT DISTINCT 
                 examDate,
@@ -136,7 +134,7 @@ const getExamDates = async (req, res) => {
             ORDER BY examDate DESC`;
         
         console.log('Executing query:', query);
-        const [results] = await connection.query(query);
+        const results = await db.executeQuery(query);
         console.log('Raw exam dates:', results);
 
         // Tarihleri UTC+3'e göre ayarla
@@ -146,7 +144,6 @@ const getExamDates = async (req, res) => {
         }));
 
         console.log('Adjusted exam dates:', adjustedResults);
-        connection.release();
         
         if (!adjustedResults || adjustedResults.length === 0) {
             console.log('No exam dates found');
@@ -172,7 +169,7 @@ const getExamTypesByDate = async (req, res) => {
             WHERE DATE(examDate) = DATE(?)
             ORDER BY examType`;
         
-        const [results] = await db.execute(query, [date]);
+        const results = await db.executeQuery(query, [date]);
         console.log('Exam types for date:', results);
         res.json(results);
     } catch (error) {
@@ -204,7 +201,7 @@ const getExamsByDateAndType = async (req, res) => {
             AND e.examType = ?
             ORDER BY e.puan DESC`;
         
-        const [results] = await db.execute(query, [queryDate, examType]);
+        const results = await db.executeQuery(query, [queryDate, examType]);
         console.log('Query results:', results);
         res.json(results);
     } catch (error) {
@@ -225,7 +222,7 @@ const getLatestExamScores = async (req, res) => {
     `;
 
     try {
-        const [results] = await db.execute(query, [date]);
+        const results = await db.executeQuery(query, [date]);
 
         if (results.length === 0) {
             return res.status(404).json({ message: 'Belirtilen tarihte sınav bulunamadı.' });
@@ -252,7 +249,7 @@ const getLatestExamDetails = async (req, res) => {
     `;
 
     try {
-        const [results] = await db.execute(query, [date]);
+        const results = await db.executeQuery(query, [date]);
 
         if (results.length === 0) {
             return res.status(404).json({ message: 'Belirtilen tarihte sınav bulunamadı.' });
