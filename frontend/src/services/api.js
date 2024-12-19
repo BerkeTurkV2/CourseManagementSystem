@@ -37,7 +37,7 @@ export const getStudentList = () => axios.get(`${API_URL}/api/student-list`);
 
 // Sınav sonuçlarını silme
 export const deleteExams = async (ids) => {
-    return await axios.post(`${API_URL}/exams/delete`, { ids });
+    return await axios.post(`${API_URL}/api/delete`, { ids });
 };
 
 // Sınav tarihleri
