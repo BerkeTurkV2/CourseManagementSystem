@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
-const courseRoutes = require('./routes/courseRoutes');
 const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');  // Yeni eklenen satır
 
@@ -12,7 +11,6 @@ app.use(express.json());
 
 // Rotalar
 app.use('/api', authRoutes);
-app.use('/api', courseRoutes);
 app.use('/api', userRoutes);
 app.use('/api', examRoutes);  // Yeni eklenen satır
 

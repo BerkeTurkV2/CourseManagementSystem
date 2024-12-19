@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 // MySQL bağlantı havuzu oluştur
-const pool = mysql.createPool({
+const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
@@ -16,7 +16,7 @@ const pool = mysql.createPool({
 const executeQuery = async (query, params = []) => {
     let connection;
     try {
-        connection = await pool.getConnection();
+        connection = await db.getConnection();
         const [results] = await connection.execute(query, params);
         return results;
     } catch (error) {
@@ -27,31 +27,21 @@ const executeQuery = async (query, params = []) => {
     }
 };
 
-// Öğrenci listesi getirme
-const getStudentList = async () => {
-    const query = `
-        SELECT id, studentNo, fullname, class
-        FROM users
-        WHERE role = 'student'
-        ORDER BY fullname
-    `;
-    return await executeQuery(query);
-};
+// Bağlantıyı test et
+async function testConnection() {
+    try {
+        const connection = await db.getConnection();
+        console.log('MySQL bağlantısı başarılı!');
+        connection.release();
+    } catch (error) {
+        console.error('MySQL bağlantı hatası:', error);
+    }
+}
 
-// Öğrenci bilgisi getirme
-const getStudentInfo = async (studentNo) => {
-    const query = `
-        SELECT *
-        FROM users
-        WHERE studentNo = ? AND role = 'student'
-    `;
-    const results = await executeQuery(query, [studentNo]);
-    return results[0] || null;
-};
+// Bağlantıyı test et
+testConnection();
 
 module.exports = {
-    pool,
-    executeQuery,
-    getStudentList,
-    getStudentInfo
+    db,
+    executeQuery
 };

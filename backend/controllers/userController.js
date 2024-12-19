@@ -133,7 +133,13 @@ const deleteTeachers = async (req, res) => {
 // Tüm öğrencileri getir
 const getStudentList = async (req, res) => {
   try {
-    const students = await db.getStudentList();
+    const query = `
+        SELECT id, studentNo, fullname, class
+        FROM users
+        WHERE role = 'student'
+        ORDER BY fullname
+    `;
+    const students = await db.executeQuery(query);
     
     if (students.length === 0) {
       return res.status(404).json({ 
