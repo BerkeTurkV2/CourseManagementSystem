@@ -20,6 +20,11 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li className="nav-item mb-2">
+                    <Link to="/admin/calendar" className="nav-link text-white d-flex align-items-center">
+                        <BsCalendarWeek className="me-3 fs-3" /> Takvim
+                    </Link>
+                </li>
+                <li className="nav-item mb-2">
                     <Link to="/admin/studentsList" className="nav-link text-white d-flex align-items-center">
                         <FaUserGraduate className="me-3 fs-3" /> Öğrenciler
                     </Link>
@@ -32,11 +37,6 @@ const Sidebar = () => {
                 <li className="nav-item mb-4">
                     <Link to="/admin/examsList" className="nav-link text-white d-flex align-items-center">
                         <PiNoteFill className="me-3 fs-3" /> Sınavlar
-                    </Link>
-                </li>
-                <li className="nav-item mb-4">
-                    <Link to="/admin/calendar" className="nav-link text-white d-flex align-items-center">
-                        <BsCalendarWeek className="me-3 fs-3" /> Takvim
                     </Link>
                 </li>
                 <li className="nav-item mb-2">

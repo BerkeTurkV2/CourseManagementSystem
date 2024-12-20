@@ -1,18 +1,5 @@
-.calendar-container {
-  padding: 20px;
-  background-color: #1a1a1a;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  height: calc(100vh - 80px);
-  color: #fff;
-}
-
-.calendar-wrapper {
-  height: calc(100% - 60px);
-}
-
 .rbc-calendar {
-  background-color: #1a1a1a;
+  background-color: #212529;
   border-radius: 8px;
   color: #fff;
 }
@@ -22,45 +9,47 @@
 }
 
 .rbc-toolbar button {
-  color: #90caf9;
-  border: 1px solid #90caf9;
-  background-color: transparent;
-  border-radius: 4px;
+  color: #fff;
+  border: 1px solid #e0d4d4;
+  background-color: #1a1d20;
+  border-radius: 8px;
   padding: 8px 16px;
-  margin: 0 4px;
-  font-weight: 500;
+  margin: 4px 10px 0 0;
+  font-weight: 600;
 }
 
 .rbc-toolbar button:hover {
-  background-color: #90caf9;
-  color: #1a1a1a;
+  background-color: #0d6efd;
+  color: #fff;
 }
 
 .rbc-toolbar button.rbc-active {
-  background-color: #90caf9;
-  color: #1a1a1a;
+  border: 1px solid #1a1d20;
+  background-color: #e0d4d4;
+  color: #1a1d20;
 }
 
 .rbc-header {
   padding: 10px;
   font-weight: 500;
-  background-color: #2d2d2d;
+  background-color: #373a3e;
   color: #fff;
   border-bottom: 1px solid #404040;
 }
 
 .rbc-event {
   padding: 4px 8px;
-  font-size: 14px;
-  border-radius: 4px;
+  font-size: 16px;
+  border-radius: 0px;
 }
 
 .rbc-today {
-  background-color: #2d2d2d !important;
+  background-color: #373a3e
+  !important;
 }
 
 .rbc-off-range-bg {
-  background-color: #262626;
+  background-color: #373a3e;
 }
 
 .rbc-date-cell {
@@ -84,71 +73,10 @@
 }
 
 .rbc-day-bg {
-  background-color: #1a1a1a;
+  background-color: #1a1d20;
 }
 
 .rbc-off-range {
   color: #666;
 }
 
-.rbc-current-time-indicator {
-  background-color: #90caf9;
-}
-
-/* Modal dark theme */
-.modal-content {
-  background-color: #2d2d2d;
-  color: #fff;
-}
-
-.modal-header {
-  border-bottom: 1px solid #404040;
-}
-
-.modal-footer {
-  border-top: 1px solid #404040;
-}
-
-.form-control, .form-select {
-  background-color: #1a1a1a;
-  border: 1px solid #404040;
-  color: #fff;
-}
-
-.form-control:focus, .form-select:focus {
-  background-color: #1a1a1a;
-  border-color: #90caf9;
-  color: #fff;
-  box-shadow: 0 0 0 0.25rem rgba(144, 202, 249, 0.25);
-}
-
-.form-control::placeholder {
-  color: #666;
-}
-
-.form-select option {
-  background-color: #1a1a1a;
-  color: #fff;
-}
-
-.btn-secondary {
-  background-color: #404040;
-  border-color: #404040;
-}
-
-.btn-secondary:hover {
-  background-color: #4d4d4d;
-  border-color: #4d4d4d;
-}
-
-.btn-primary {
-  background-color: #90caf9;
-  border-color: #90caf9;
-  color: #1a1a1a;
-}
-
-.btn-primary:hover {
-  background-color: #42a5f5;
-  border-color: #42a5f5;
-  color: #1a1a1a;
-}

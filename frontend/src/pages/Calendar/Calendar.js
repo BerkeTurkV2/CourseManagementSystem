@@ -7,7 +7,6 @@ import getDay from 'date-fns/getDay';
 import tr from 'date-fns/locale/tr';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
-import { Modal, Button, Form } from 'react-bootstrap';
 import { getEvents, addEvent, updateEvent, deleteEvent } from '../../services/api';
 
 const locales = {
@@ -23,9 +22,9 @@ const localizer = dateFnsLocalizer({
 });
 
 const eventTypeColors = {
-  exam: '#ff4d4d',  // Kırmızı
-  meeting: '#4da6ff', // Mavi
-  other: '#47d147'   // Yeşil
+  exam: '#074297',  
+  meeting: '#06377e', 
+  other: '#052c65'   
 };
 
 function Calendar() {
@@ -58,6 +57,14 @@ function Calendar() {
   };
 
   const handleSelectSlot = ({ start, end }) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (start < today) {
+      alert('Geçmiş tarihlere etkinlik eklenemez!');
+      return;
+    }
+    
     setSelectedEvent(null);
     setNewEvent({
       title: '',
@@ -130,24 +137,25 @@ function Calendar() {
   };
 
   return (
-    <div className="calendar-container">
+    <div className="container-fluid px-4 text-white min-vh-100">
+      <div className="card bg-dark text-white border-1 shadow p-4">
       <BigCalendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 'calc(100vh - 100px)' }}
+        style={{ height: 'calc(100vh - 140px)' }}
         selectable
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleSelectEvent}
         eventPropGetter={eventStyleGetter}
-        views={['month', 'agenda']} // Ay ve ajanda görünümlerini ekle
+        views={['month', 'agenda']}
         defaultView="month"
         messages={{
-          next: "İleri",
-          previous: "Geri",
+          next: "Gelecek Ay",
+          previous: "Geçen Ay",
           today: "Bugün",
-          month: "Ay",
+          month: "Takvim",
           agenda: "Ajanda",
           date: "Tarih",
           event: "Etkinlik",
@@ -158,78 +166,99 @@ function Calendar() {
         }}
       />
 
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedEvent ? 'Etkinliği Düzenle' : 'Yeni Etkinlik'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Başlık</Form.Label>
-              <Form.Control
-                type="text"
-                value={newEvent.title}
-                onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Tür</Form.Label>
-              <Form.Select
-                value={newEvent.type}
-                onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value })}
-              >
-                <option value="other">Diğer</option>
-                <option value="exam">Sınav</option>
-                <option value="meeting">Toplantı</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Açıklama</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={newEvent.description}
-                onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Başlangıç</Form.Label>
-              <Form.Control
-                type="datetime-local"
-                value={format(newEvent.start, "yyyy-MM-dd'T'HH:mm")}
-                onChange={(e) => setNewEvent({ ...newEvent, start: new Date(e.target.value) })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Bitiş</Form.Label>
-              <Form.Control
-                type="datetime-local"
-                value={format(newEvent.end, "yyyy-MM-dd'T'HH:mm")}
-                onChange={(e) => setNewEvent({ ...newEvent, end: new Date(e.target.value) })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            İptal
-          </Button>
-          {selectedEvent ? (
-            <>
-              <Button variant="danger" onClick={handleDeleteEvent}>
-                Sil
-              </Button>
-              <Button variant="primary" onClick={handleUpdateEvent}>
-                Güncelle
-              </Button>
-            </>
-          ) : (
-            <Button variant="primary" onClick={handleAddEvent}>
-              Ekle
-            </Button>
-          )}
-        </Modal.Footer>
-      </Modal>
+      {showModal && (
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
+          <div className="modal-dialog mt-4">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  {selectedEvent ? 'Etkinliği Düzenle' : 'Yeni Etkinlik'}
+                </h5>
+                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+              </div>
+              <div className="modal-body">
+                <form>
+                  <div className="mb-3">
+                    <label htmlFor="title" className="form-label">Başlık</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="title"
+                      value={newEvent.title}
+                      onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="type" className="form-label">Tür</label>
+                    <select
+                      className="form-select"
+                      id="type"
+                      value={newEvent.type}
+                      onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value })}
+                    >
+                      <option value="other">Diğer</option>
+                      <option value="exam">Sınav</option>
+                      <option value="meeting">Konferans</option>
+                    </select>
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="description" className="form-label">Açıklama</label>
+                    <textarea
+                      className="form-control"
+                      id="description"
+                      rows="3"
+                      value={newEvent.description}
+                      onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="start" className="form-label">Başlangıç</label>
+                    <input
+                      type="datetime-local"
+                      className="form-control"
+                      id="start"
+                      value={format(newEvent.start, "yyyy-MM-dd'T'HH:mm")}
+                      onChange={(e) => setNewEvent({ ...newEvent, start: new Date(e.target.value) })}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="end" className="form-label">Bitiş</label>
+                    <input
+                      type="datetime-local"
+                      className="form-control"
+                      id="end"
+                      value={format(newEvent.end, "yyyy-MM-dd'T'HH:mm")}
+                      onChange={(e) => setNewEvent({ ...newEvent, end: new Date(e.target.value) })}
+                    />
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
+                  İptal
+                </button>
+                {selectedEvent ? (
+                  <>
+                    <button type="button" className="btn btn-danger" onClick={handleDeleteEvent}>
+                      Sil
+                    </button>
+                    <button type="button" className="btn btn-primary" onClick={handleUpdateEvent}>
+                      Güncelle
+                    </button>
+                  </>
+                ) : (
+                  <button type="button" className="btn btn-primary" onClick={handleAddEvent}>
+                    Ekle
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {showModal && <div className="modal-backdrop fade show"></div>}
+      </div>
     </div>
   );
 }
