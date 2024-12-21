@@ -7,7 +7,7 @@ import {
     getExamDates,
     getLatestExamScores,
     getLatestExamDetails
-} from '../../services/api';
+} from '../../../services/api';
 
 const MainPanel = () => {
     const [stats, setStats] = React.useState({

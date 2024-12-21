@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DarkMode from "../../components/DarkMode/DarkMode";
-import { login } from '../../services/api';
+import DarkMode from "../../../components/DarkMode/DarkMode";
+import { login } from '../../../services/api';
 import './styles.css';
 
 function Login() {

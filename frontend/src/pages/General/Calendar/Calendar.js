@@ -7,7 +7,7 @@ import getDay from 'date-fns/getDay';
 import tr from 'date-fns/locale/tr';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
-import { getEvents, addEvent, updateEvent, deleteEvent } from '../../services/api';
+import { getEvents, addEvent, updateEvent, deleteEvent } from '../../../services/api';
 
 const locales = {
   'tr': tr,
