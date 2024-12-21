@@ -29,6 +29,7 @@ const login = async (req, res) => {
         id: user.id, 
         username: user.username, 
         role: user.role,
+        studentNo: user.studentNo, 
         fullname: user.fullname 
       },
       process.env.JWT_SECRET,
@@ -40,6 +41,7 @@ const login = async (req, res) => {
       token,
       role: user.role,
       username: user.username,
+      studentNo: user.studentNo,
       fullname: user.fullname
     });
   } catch (err) {

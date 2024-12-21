@@ -9,7 +9,9 @@ const {
     getExamsByDateAndType,
     deleteExams,
     getLatestExamScores,
-    getLatestExamDetails  
+    getLatestExamDetails, 
+    getStudentExamResults,
+    getStudentExamAverages
 } = require('../controllers/examController');
 
 const router = express.Router();
@@ -37,6 +39,10 @@ router.get('/latest-exam-scores/:date', getLatestExamScores);
 
 // Son sınavın detaylarını getirme
 router.get('/latest-exam-details/:date', getLatestExamDetails);
+
+// Öğrenci sınav sonuçları route'ları
+router.get('/exams/student/:studentId', getStudentExamResults);
+router.get('/exams/student/:studentId/averages', getStudentExamAverages);
 
 // Sınav silme
 router.post('/delete', deleteExams);

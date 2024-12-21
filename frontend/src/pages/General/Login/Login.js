@@ -15,11 +15,14 @@ function Login() {
 
     try {
       const response = await login({ username, password });
-      const { token, role } = response.data;
+      const { token, role, studentNo } = response.data;
       
-      // Token'ı localStorage'a kaydet
+      // Token'ı ve kullanıcı bilgilerini localStorage'a kaydet
       localStorage.setItem('token', token);
       localStorage.setItem('userRole', role);
+      if (studentNo) {
+        localStorage.setItem('studentNo', studentNo);
+      }
 
       // Kullanıcıyı rolüne göre yönlendir
       if (role === 'admin') {

@@ -278,6 +278,110 @@ const deleteExams = async (req, res) => {
     }
 };
 
+// Öğrencinin tüm sınav sonuçlarını getir
+const getStudentExamResults = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        console.log('Gelen öğrenci numarası:', studentId);
+
+        const examResults = await db.executeQuery(
+            `SELECT e.*,
+                    COUNT(*) OVER (PARTITION BY e.examDate, e.examType) as total_students,
+                    RANK() OVER (PARTITION BY e.examDate, e.examType ORDER BY e.puan DESC) as student_rank
+             FROM exams e
+             WHERE e.studentNo = ?
+             ORDER BY e.examDate DESC`,
+            [studentId]
+        );
+
+        console.log('Bulunan sınav sonuçları:', examResults);
+
+        // Sonuç boş ise boş array dön
+        if (!examResults || examResults.length === 0) {
+            console.log('Sınav sonucu bulunamadı');
+            return res.json([]);
+        }
+
+        // Sonuçları formatla
+        const formattedResults = examResults.map(exam => ({
+            id: exam.id,
+            studentNo: exam.studentNo,
+            examType: exam.examType,
+            examDate: exam.examDate,
+            turkceNet: exam.turkceNet,
+            sosyalNet: exam.sosyalNet,
+            matematikNet: exam.matematikNet,
+            fenNet: exam.fenNet,
+            fizikNet: exam.fizikNet,
+            kimyaNet: exam.kimyaNet,
+            biyolojiNet: exam.biyolojiNet,
+            edebiyatNet: exam.edebiyatNet,
+            tarihNet: exam.tarihNet,
+            cografyaNet: exam.cografyaNet,
+            felsefeNet: exam.felsefeNet,
+            dinNet: exam.dinNet,
+            ingilizceNet: exam.ingilizceNet,
+            almancaNet: exam.almancaNet,
+            puan: parseFloat(exam.puan).toFixed(2),
+            total_students: exam.total_students,
+            rank: exam.student_rank,
+            created_at: exam.created_at
+        }));
+
+        res.json(formattedResults);
+    } catch (error) {
+        console.error('Sınav sonuçları getirilirken hata:', error);
+        res.status(500).json({ error: 'Sınav sonuçları getirilemedi' });
+    }
+};
+
+// Öğrencinin sınav ortalamalarını getir
+const getStudentExamAverages = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        console.log('Gelen öğrenci numarası (ortalamalar):', studentId);
+
+        // TYT ve AYT ortalamalarını ve sınav sayılarını hesapla
+        const averages = await db.executeQuery(
+            `SELECT 
+                AVG(CASE WHEN examType = 'TYT' THEN puan END) as tyt_average,
+                AVG(CASE WHEN examType = 'AYT(MF)' THEN puan END) as ayt_average,
+                COUNT(*) as total_exams,
+                COUNT(CASE WHEN examType = 'TYT' THEN 1 END) as tyt_count,
+                COUNT(CASE WHEN examType = 'AYT(MF)' THEN 1 END) as ayt_count
+               FROM exams
+               WHERE studentNo = ?`,
+            [studentId]
+        );
+
+        console.log('Bulunan ortalamalar:', averages);
+
+        // Sonuç boş ise varsayılan değerler dön
+        if (!averages || averages.length === 0) {
+            console.log('Ortalama bulunamadı');
+            return res.json({
+                tytAverage: 0,
+                aytAverage: 0,
+                totalExams: 0,
+                tytCount: 0,
+                aytCount: 0
+            });
+        }
+
+        const result = averages[0];
+        res.json({
+            tytAverage: result.tyt_average || 0,
+            aytAverage: result.ayt_average || 0,
+            totalExams: result.total_exams || 0,
+            tytCount: result.tyt_count || 0,
+            aytCount: result.ayt_count || 0
+        });
+    } catch (error) {
+        console.error('Sınav ortalamaları hesaplanırken hata:', error);
+        res.status(500).json({ error: 'Sınav ortalamaları hesaplanamadı' });
+    }
+};
+
 module.exports = {
     addExam,
     getStudentInfo,
@@ -288,5 +392,7 @@ module.exports = {
     getExamsByDateAndType,
     getLatestExamScores,
     getLatestExamDetails,
-    deleteExams
+    deleteExams,
+    getStudentExamResults,
+    getStudentExamAverages
 };

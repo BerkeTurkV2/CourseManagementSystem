@@ -3,10 +3,11 @@ require('dotenv').config();
 
 // MySQL bağlantı havuzu oluştur
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'coursemanagement',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'root',
+    database: process.env.DB_NAME || 'coursemanagement',
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -31,10 +32,11 @@ const executeQuery = async (query, params = []) => {
 async function testConnection() {
     try {
         const connection = await db.getConnection();
-        console.log('MySQL bağlantısı başarılı!');
+        console.log('Veritabanı bağlantısı başarılı!');
         connection.release();
     } catch (error) {
-        console.error('MySQL bağlantı hatası:', error);
+        console.error('Veritabanı bağlantı hatası:', error);
+        process.exit(1); // Bağlantı başarısız olursa uygulamayı sonlandır
     }
 }
 
@@ -42,6 +44,6 @@ async function testConnection() {
 testConnection();
 
 module.exports = {
-    db,
-    executeQuery
+    executeQuery,
+    db
 };

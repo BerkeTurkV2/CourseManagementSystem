@@ -53,6 +53,15 @@ export const getExamsByDateAndType = (date, examType) => api.get(`/api/by-date/$
 export const getLatestExamScores = (date) => api.get(`/api/latest-exam-scores/${date}`);
 export const getLatestExamDetails = (date) => api.get(`/api/latest-exam-details/${date}`);
 
+// Öğrenci sınav sonuçları endpoints
+export const getStudentExamResults = async (studentId) => {
+  return api.get(`/api/exams/student/${studentId}`);
+};
+
+export const getStudentExamAverages = async (studentId) => {
+  return api.get(`/api/exams/student/${studentId}/averages`);
+};
+
 // Calendar events endpoints
 export const getEvents = () => api.get('/api/events');
 export const addEvent = (data) => api.post('/api/events', data);
