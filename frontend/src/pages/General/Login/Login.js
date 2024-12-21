@@ -25,9 +25,9 @@ function Login() {
       if (role === 'admin') {
         navigate('/admin/mainPanel');
       } else if (role === 'teacher') {
-        navigate('/teacher');
+        navigate('/teacher/mainPanel');
       } else if (role === 'student') {
-        navigate('/student');
+        navigate('/student/mainPanel');
       }
     } catch (error) {
       console.error('Giriş işlemi sırasında bir hata oluştu:', error);
